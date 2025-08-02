@@ -1,5 +1,6 @@
 # To-Do App
-<img width="1795" height="715" alt="Screenshot 2025-08-01 at 16 48 11" src="https://github.com/user-attachments/assets/bf4a9d1d-da89-4a0b-befe-225c7e4e61a9" />
+<img width="1795" height="715" alt="Screenshot 2025-08-01 at 16 48 11" src="https://github.com/user-attachments/assets/7c52f3b4-c8c3-48dc-a314-d217c4910fc5" />
+
 
 
 **Summary**
@@ -14,7 +15,8 @@ This To-Do app is a full-stack application built using React.js, Vite, MDB Boots
 
 ## Screenshots
 
-<img width="1486" height="628" alt="Screenshot 2025-08-01 at 16 47 49" src="https://github.com/user-attachments/assets/a3654ec7-81d2-4b34-97d5-dfe77231ca14" />
+<img width="1486" height="628" alt="Screenshot 2025-08-01 at 16 47 49" src="https://github.com/user-attachments/assets/84c452ec-924b-4cae-86db-887956555338" />
+
 
 ## Getting Started
 
