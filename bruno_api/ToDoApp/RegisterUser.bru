@@ -1,0 +1,70 @@
+meta {
+  name: RegisterUser
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4000/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "{{username}}",
+    "email": "{{username}}@gmail.com",
+    "password": "{{password}}"
+  }
+}
+
+script:pre-request {
+    // Generate random username and password before the request
+  bru.setVar("username", "user_" + Math.random().toString(36).substring(2, 10));
+  bru.setVar("password", "pass_" + Math.random().toString(36).substring(2, 10))
+}
+
+script:post-response {
+  const body = req.getBody();
+  bru.setVar("password",body.password);
+}
+
+tests {
+  var jsonData = res.getBody();
+  // Set collection variables for username and password
+  bru.setVar("username", jsonData.user.username);
+  bru.setVar("password", jsonData.user.password);
+  
+  test("Status code is 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("Content-Type is application/json", function () {
+    expect(res.getHeader('content-type')).to.include('application/json');
+  });
+  
+  test("Response has required top-level properties", function () {
+    expect(jsonData).to.have.keys('status', 'user');
+  });
+  
+  test("status property is boolean", function () {
+    expect(typeof jsonData.status).to.equal('boolean');
+  });
+  
+  test("user property is an object with required fields", function () {
+    expect(jsonData.user).to.be.an('object');
+    expect(jsonData.user).to.have.keys('username', 'email', 'password', '_id', '__v');
+  });
+  
+  test("user fields are correct types", function () {
+    expect(typeof jsonData.user.username).to.equal('string');
+    expect(typeof jsonData.user.email).to.equal('string');
+    expect(typeof jsonData.user.password).to.equal('string');
+    expect(typeof jsonData.user._id).to.equal('string');
+    expect(typeof jsonData.user.__v).to.equal('number');
+  });
+}
+
+settings {
+  encodeUrl: true
+}

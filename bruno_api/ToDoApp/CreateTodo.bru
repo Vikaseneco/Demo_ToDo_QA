@@ -1,0 +1,64 @@
+meta {
+  name: CreateTodo
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:4000/api/route/tasks
+  body: json
+  auth: none
+}
+
+headers {
+  x-auth-token: {{token}}
+}
+
+body:json {
+  {
+    "text": "test"
+  }
+}
+
+tests {
+  var jsonData = res.getBody();
+  // Save task _id to collection variable for use in other requests
+  if (jsonData && jsonData.task && jsonData.task._id) {
+    bru.setVar("taskId", jsonData.task._id);
+  }
+  
+  test("Status code is 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  
+  test("Content-Type is application/json", function () {
+    expect(res.getHeader('content-type')).to.include('application/json');
+  });
+  
+  test("Response has required top-level properties", function () {
+    expect(jsonData).to.have.keys('status', 'task');
+  });
+  
+  test("status property is boolean", function () {
+    expect(typeof jsonData.status).to.equal('boolean');
+  });
+  
+  test("task property is an object with required fields", function () {
+    expect(jsonData.task).to.be.an('object');
+    expect(jsonData.task).to.have.keys('text', 'user', 'isChecked', '_id', 'createdAt', '__v');
+  });
+  
+  test("task fields are correct types", function () {
+    expect(typeof jsonData.task.text).to.equal('string');
+    expect(typeof jsonData.task.user).to.equal('string');
+    expect(typeof jsonData.task.isChecked).to.equal('boolean');
+    expect(typeof jsonData.task._id).to.equal('string');
+    expect(typeof jsonData.task.createdAt).to.equal('string');
+    expect(typeof jsonData.task.__v).to.equal('number');
+  });
+}
+
+settings {
+  encodeUrl: true
+}

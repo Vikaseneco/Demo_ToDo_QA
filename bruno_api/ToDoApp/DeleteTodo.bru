@@ -1,0 +1,26 @@
+meta {
+  name: DeleteTodo
+  type: http
+  seq: 9
+}
+
+delete {
+  url: http://localhost:4000/api/route/tasks/{{taskId}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  x-auth-token: {{token}}
+}
+
+tests {
+  test("Status code is 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,62 @@
+meta {
+  name: LoginUser-Valid
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:4000/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "{{username}}",
+    "password": "{{user_pass}}"
+  }
+}
+
+tests {
+  var jsonData = res.getBody();
+  // Save token to collection variable
+  bru.setVar("token", jsonData.token);
+  
+  test("Status code is 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Content-Type is application/json", function () {
+    expect(res.getHeader('content-type')).to.include('application/json');
+  });
+  
+  test("Response has required top-level properties", function () {
+    expect(jsonData).to.have.keys('status', 'user', 'token');
+  });
+  
+  test("status property is boolean", function () {
+    expect(typeof jsonData.status).to.equal('boolean');
+  });
+  
+  test("user property is an object with required fields", function () {
+    expect(jsonData.user).to.be.an('object');
+    expect(jsonData.user).to.have.keys('_id', 'username', 'email', 'password', '__v');
+  });
+  
+  test("user fields are correct types", function () {
+    expect(typeof jsonData.user._id).to.equal('string');
+    expect(typeof jsonData.user.username).to.equal('string');
+    expect(typeof jsonData.user.email).to.equal('string');
+    expect(typeof jsonData.user.password).to.equal('string');
+    expect(typeof jsonData.user.__v).to.equal('number');
+  });
+  
+  test("token is a non-empty string", function () {
+    expect(typeof jsonData.token).to.equal('string');
+    expect(jsonData.token.length).to.be.greaterThan(0);
+  });
+}
+
+settings {
+  encodeUrl: true
+}

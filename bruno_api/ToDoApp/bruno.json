@@ -1,0 +1,23 @@
+{
+  "version": "1",
+  "name": "ToDoApp",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0.003994941711425781,
+  "filesCount": 8,
+  "proxy": {
+    "bypassProxy": "http://localhost:5173",
+    "enabled": "global",
+    "auth": {
+      "enabled": false,
+      "username": "",
+      "password": ""
+    },
+    "port": null,
+    "hostname": "",
+    "protocol": "http"
+  }
+}

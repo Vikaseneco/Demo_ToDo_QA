@@ -1,0 +1,47 @@
+meta {
+  name: ToDoAPP
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:4000
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  // Bruno JavaScript-style test cases for GET /
+  var jsonData = res.getBody();
+  
+  test("Status code is 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Content-Type is application/json", function () {
+    expect(res.getHeader('content-type')).to.include('application/json');
+  });
+  
+  test("Response is not empty", function () {
+    if (typeof jsonData === 'string') {
+      expect(jsonData.length).to.be.greaterThan(0);
+    } else if (Array.isArray(jsonData)) {
+      expect(jsonData.length).to.be.greaterThan(0);
+    } else if (typeof jsonData === 'object' && jsonData !== null) {
+      expect(Object.keys(jsonData).length).to.be.greaterThan(0);
+    }
+  });
+  
+  test("Response has 'message' property and correct type", function () {
+    expect(jsonData).to.have.property('message');
+    expect(typeof jsonData.message).to.equal('string');
+  });
+}
+
+settings {
+  encodeUrl: true
+}
